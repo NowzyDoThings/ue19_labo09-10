@@ -1,10 +1,22 @@
-FROM python:3
+FROM python:3.7.3-alpine as base
 
-WORKDIR C:/Users/User/Helmo/B2/Q1/Principe avancé/Labo/Labo-09-10/request api py
+FROM base as builder
 
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apk add --no-cache python3 python3-dev py-pip build-base
 
-COPY . .
+RUN mkdir /install/
+WORKDIR /install
 
-CMD [ "python", "./app.py" ]
+COPY requirements.txt requirements.txt
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+FROM base
+
+WORKDIR /app/
+
+COPY --from=builder /install /usr/local
+
+COPY app.py /app/app.py
+
+CMD ["python", "/app/app.py"]

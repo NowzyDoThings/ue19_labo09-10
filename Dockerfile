@@ -17,6 +17,6 @@ WORKDIR /app/
 
 COPY --from=builder /install /usr/local
 
-COPY app.py /app/mon-app.py
+COPY mon-app.py /app/mon-app.py
 
-CMD ["python", "/app/app.py"]
+CMD ["python", "/app/mon-app.py"]
